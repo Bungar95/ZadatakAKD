@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZadatakAKD.Data;
 
@@ -11,9 +12,11 @@ using ZadatakAKD.Data;
 namespace ZadatakAKD.Migrations
 {
     [DbContext(typeof(ZadatakAKDContext))]
-    partial class ZadatakAKDContextModelSnapshot : ModelSnapshot
+    [Migration("20230125140819_added_identity")]
+    partial class addedidentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

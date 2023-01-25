@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +7,7 @@ using ZadatakAKD.Models;
 
 namespace ZadatakAKD.Controllers
 {
+    [Authorize]
     public class KnjigasController : Controller
     {
         private readonly ZadatakAKDContext _context;
@@ -20,6 +18,7 @@ namespace ZadatakAKD.Controllers
         }
 
         // GET: Knjigas
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var zadatakAKDContext = _context.Knjigas.Include(k => k.Autor);
@@ -48,7 +47,7 @@ namespace ZadatakAKD.Controllers
         // GET: Knjigas/Create
         public IActionResult Create()
         {
-            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id");
+            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "PunoIme");
             return View();
         }
 
@@ -66,7 +65,7 @@ namespace ZadatakAKD.Controllers
                 return RedirectToAction(nameof(Index));
             } catch (Exception ex)
             {
-                ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.AutorId);
+                ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "PunoIme", knjiga.AutorId);
                 return View(knjiga);
             }          
         }
@@ -84,7 +83,7 @@ namespace ZadatakAKD.Controllers
             {
                 return NotFound();
             }
-            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.Autor.PunoIme);
+            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "PunoIme", knjiga.AutorId);
             return View(knjiga);
         }
 
@@ -114,7 +113,7 @@ namespace ZadatakAKD.Controllers
                 }
                 else
                 {
-                    ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.AutorId);
+                    ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "PunoIme", knjiga.AutorId);
                     return View(knjiga);
                 }
             }  
@@ -161,6 +160,15 @@ namespace ZadatakAKD.Controllers
         private bool KnjigaExists(int id)
         {
           return _context.Knjigas.Any(e => e.Id == id);
+        }
+
+        // EXPORT: Knjigas/Export
+        [HttpGet, ActionName("Export")]
+        public IActionResult Export()
+        {
+            var toDownload = _context.Knjigas;
+            HttpContext.Response.Headers.Add("Content-Disposition", "attachment; filename=export_knjige.json");
+            return new JsonResult(toDownload);
         }
     }
 }
