@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using ZadatakAKD.Data;
 using ZadatakAKD.Models;
@@ -21,9 +22,33 @@ namespace ZadatakAKD.Controllers
         }
 
         // GET: Autors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-              return View(await _context.Autors.ToListAsync());
+            ViewData["ImeSortParm"] = sortOrder == "Ime" ? "ime_desc" : "Ime";
+            ViewData["PrezimeSortParm"] = sortOrder == "Prezime" ? "prezime_desc" : "Prezime";
+
+            var zadatakAKDContext = from a in _context.Autors select a;
+
+            switch (sortOrder)
+            {
+                case "Ime":
+                    zadatakAKDContext = zadatakAKDContext.OrderBy(a => a.Ime);
+                    break;
+                case "ime_desc":
+                    zadatakAKDContext = zadatakAKDContext.OrderByDescending(a => a.Ime);
+                    break;
+                case "Prezime":
+                    zadatakAKDContext = zadatakAKDContext.OrderBy(a => a.Prezime);
+                    break;
+                case "prezime_desc":
+                    zadatakAKDContext = zadatakAKDContext.OrderByDescending(a => a.Prezime);
+                    break;
+                default:
+                    zadatakAKDContext = zadatakAKDContext.OrderBy(a => a.Id);
+                    break;
+            }
+
+            return View(await zadatakAKDContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Autors/Details/5

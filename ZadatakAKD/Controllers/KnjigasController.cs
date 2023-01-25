@@ -20,10 +20,33 @@ namespace ZadatakAKD.Controllers
         }
 
         // GET: Knjigas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var zadatakAKDContext = _context.Knjigas.Include(k => k.Autor);
-            return View(await zadatakAKDContext.ToListAsync());
+
+            ViewData["NaslovSortParm"] = sortOrder == "Naslov" ? "naslov_desc" : "Naslov";
+            ViewData["AutorSortParm"] = sortOrder == "Autor" ? "autor_desc" : "Autor";
+
+            var zadatakAKDContext = from k in _context.Knjigas.Include(kn => kn.Autor) select k;
+
+            switch (sortOrder)
+            {
+                case "Naslov":
+                    zadatakAKDContext = zadatakAKDContext.OrderBy(k => k.Naslov);
+                    break;
+                case "naslov_desc":
+                    zadatakAKDContext = zadatakAKDContext.OrderByDescending(k => k.Naslov);
+                    break;
+                case "Autor":
+                    zadatakAKDContext = zadatakAKDContext.OrderBy(k => k.Autor.Prezime);
+                    break;
+                case "autor_desc":
+                    zadatakAKDContext = zadatakAKDContext.OrderByDescending(k => k.Autor.Prezime);
+                    break;
+                default:
+                    zadatakAKDContext = zadatakAKDContext.OrderBy(k => k.Id);
+                    break;
+            }
+            return View(await zadatakAKDContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Knjigas/Details/5
