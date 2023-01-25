@@ -57,16 +57,18 @@ namespace ZadatakAKD.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,AutorId,Naslov,GodinaIzdavanja")] Knjiga knjiga)
+        public async Task<IActionResult> Create([Bind("AutorId,Naslov,GodinaIzdavanja")] Knjiga knjiga)
         {
-            if (ModelState.IsValid)
+            try
             {
                 _context.Add(knjiga);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.AutorId);
-            return View(knjiga);
+            } catch (Exception ex)
+            {
+                ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.AutorId);
+                return View(knjiga);
+            }          
         }
 
         // GET: Knjigas/Edit/5
@@ -82,7 +84,7 @@ namespace ZadatakAKD.Controllers
             {
                 return NotFound();
             }
-            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.AutorId);
+            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.Autor.PunoIme);
             return View(knjiga);
         }
 
@@ -98,28 +100,24 @@ namespace ZadatakAKD.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(knjiga);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!KnjigaExists(knjiga.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _context.Update(knjiga);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.AutorId);
-            return View(knjiga);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!KnjigaExists(knjiga.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    ViewData["AutorId"] = new SelectList(_context.Autors, "Id", "Id", knjiga.AutorId);
+                    return View(knjiga);
+                }
+            }  
         }
 
         // GET: Knjigas/Delete/5

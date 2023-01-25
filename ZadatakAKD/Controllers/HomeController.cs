@@ -18,9 +18,9 @@ namespace ZadatakAKD.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Github()
         {
-            return View();
+            return Redirect("https://github.com/Bungar95");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
