@@ -1,12 +1,11 @@
 ﻿@model ZadatakAKD.Models.Autor
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Uredi autora";
 }
 
-<h1>Edit</h1>
+<h1>Uredi autora</h1>
 
-<h4>Autor</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,14 +23,14 @@
                 <span asp-validation-for="Prezime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Spremi" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Natrag na listu</a>
 </div>
 
 @section Scripts {

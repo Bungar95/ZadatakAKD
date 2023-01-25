@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -56,14 +57,19 @@ namespace ZadatakAKD.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Ime,Prezime")] Autor autor)
+        public async Task<IActionResult> Create([Bind("Ime,Prezime")] Autor autor)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(autor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                 _context.Add(autor);
+                 await _context.SaveChangesAsync();
+                 return RedirectToAction(nameof(Index));
+                
+            } catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
             }
+            
             return View(autor);
         }
 
@@ -95,14 +101,12 @@ namespace ZadatakAKD.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
                 try
                 {
                     _context.Update(autor);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+                    return RedirectToAction(nameof(Index));
+                } catch (DbUpdateConcurrencyException)
                 {
                     if (!AutorExists(autor.Id))
                     {
@@ -110,12 +114,9 @@ namespace ZadatakAKD.Controllers
                     }
                     else
                     {
-                        throw;
+                        return View(autor);
                     }
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(autor);
         }
 
         // GET: Autors/Delete/5

@@ -1,20 +1,19 @@
 ﻿@model ZadatakAKD.Models.Knjiga
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Kreiraj knjigu";
 }
 
-<h1>Create</h1>
+<h1>Kreiraj knjigu</h1>
 
-<h4>Knjiga</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="AutorId" class="control-label"></label>
-                <select asp-for="AutorId" class ="form-control" asp-items="ViewBag.AutorId"></select>
+                <label asp-for="Autor" class="control-label"></label>
+                <select asp-for="AutorId" class="form-control" asp-items="ViewBag.AutorId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Naslov" class="control-label"></label>
@@ -27,14 +26,14 @@
                 <span asp-validation-for="GodinaIzdavanja" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Kreiraj" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Natrag na listu</a>
 </div>
 
 @section Scripts {
