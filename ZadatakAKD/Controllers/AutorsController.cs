@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -12,6 +13,7 @@ using ZadatakAKD.Models;
 
 namespace ZadatakAKD.Controllers
 {
+    [Authorize]
     public class AutorsController : Controller
     {
         private readonly ZadatakAKDContext _context;
@@ -22,6 +24,7 @@ namespace ZadatakAKD.Controllers
         }
 
         // GET: Autors
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewData["ImeSortParm"] = sortOrder == "Ime" ? "ime_desc" : "Ime";
@@ -185,5 +188,15 @@ namespace ZadatakAKD.Controllers
         {
           return _context.Autors.Any(e => e.Id == id);
         }
+
+        // EXPORT: Autors/Export
+        [HttpGet, ActionName("Export")]
+        public IActionResult Export()
+        {
+            var toDownload = _context.Autors;
+            HttpContext.Response.Headers.Add("Content-Disposition", "attachment; filename=export_autori.json");
+            return new JsonResult(toDownload);
+        }
+        
     }
 }

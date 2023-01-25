@@ -1,13 +1,30 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <h1 class="display-4">Welcome, @UserManager.GetUserName(User)!</h1>
+    } else
+    {
+        <h1 class="display-4">Welcome</h1>
+    }  
+    <br />
+    <p>Materijali korišteni tijekom zadatka</p>
+    <br />  
+    <b>Start(IDE, MVC, baza...), CRUD</b>
+    <p><a href="https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mvc-app/start-mvc?view=aspnetcore-6.0&tabs=visual-studio" target="_blank">Get started with ASP.NET Core MVC</a></p>
+    <p>Stackoverflow</p>
+    <br />  
+    <b>Login</b>
 
-    <p>Ovdje ću ostaviti moguće komentare tijekom izrade zadatka</p>
-    <ul>
-        
-    </ul>
+    <p><a href="https://learn.microsoft.com/en-us/aspnet/web-api/overview/security/authentication-and-authorization-in-aspnet-web-api#using-the-authorize-attribute" target="_blank">Authentication and Authorization in ASP.NET Web API</a></p>
+    <p><a href="https://endjin.com/blog/2022/03/adding-authentication-and-authorisation-to-aspnet-core-web-applications" target="_blank">Adding Authentication and Authorisation to ASP.NET Core Web Applications</a></p>
+
+               
 </div>
