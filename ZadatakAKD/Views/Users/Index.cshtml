@@ -1,0 +1,43 @@
+﻿@model List<Microsoft.AspNetCore.Identity.IdentityUser>
+@{
+    ViewData["Title"] = "Manage Accounts";
+}
+
+<h1>Popis korisnika</h1>
+<p>
+    (<a asp-action="Export">Export korisnika</a>)
+</p>
+<p>
+    <a asp-action="Create">Kreiraj novog korisnika</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action ="Index" asp-route-sortOrder="@ViewData["UserNameSortParm"]">UserName</a>
+            </th>
+            <th>
+                <a asp-action ="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]">Email</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Uredi</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Detalji</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Izbriši</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
