@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ZadatakAKDContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ZadatakAKDContext") ?? throw new InvalidOperationException("Connection string 'ZadatakAKDContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ZadatakAKDContext>();
 
